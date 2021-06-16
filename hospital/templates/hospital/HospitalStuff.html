@@ -1,0 +1,185 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} Hospital Data {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main class="content">
+
+        {% include 'includes/navigation.html' %}
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+            <h2 class="h2 mb-4">Hospital Panel</h2>
+        </div>
+        <form action="{% url 'hospital:HospitalStuff' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 col-xl-12">
+                    <div class="card card-body bg-white border-light shadow-sm mb-4">
+                        <h2 class="h5 mb-4">Hospital Stuff</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div>
+                                        <label for="id_docter_name">Docter name:</label>
+                                        <input type="text" name="docter_name" class="vTextField" maxlength="16" 
+                                                id="id_docter_name" value="{{ stuff.docter_name|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                        <label for="id_docter_details">Docter details:</label>
+                                        <input type="text" name="docter_details" cols="10" rows="1" class="vLargeTextField" 
+                                                maxlength="100" id="id_docter_details" value="{{ stuff.docter_details|default:'' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label for="id_regural_beds">Total Regural Beds:</label>
+                                        <input type="number" name="regural_beds" class="vIntegerField" 
+                                                id="id_regural_beds" value="{{ stuff.regural_beds|default:'' }}">  
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label for="id_OCCUPIED_regural_beds">OCCUPIED regural beds:</label>
+                                        <input type="number" name="OCCUPIED_regural_beds" class="vIntegerField" 
+                                                id="id_OCCUPIED_regural_beds" value="{{ stuff.OCCUPIED_regural_beds|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="id_VACANT_regural_beds">Vaccant regural beds auto:</label>
+                                            <input type="number" name="VACANT_regural_beds" class="vIntegerField" 
+                                            id="id_VACANT_regural_beds" value="{{ stuff.regural_beds|sub:stuff.OCCUPIED_regural_beds }}"  readonly>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label for="id_oxygen_beds">Oxygen beds:</label>
+                                        <input type="number" name="oxygen_beds" class="vIntegerField" 
+                                                id="id_oxygen_beds" value="{{ stuff.oxygen_beds|default:'' }}">
+                                     
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label for="id_OCCUPIED_oxygen_beds">OCCUPIED oxygen beds:</label>
+                                        <input type="number" name="OCCUPIED_oxygen_beds" class="vIntegerField" 
+                                                id="id_OCCUPIED_oxygen_beds" value="{{ stuff.OCCUPIED_oxygen_beds|default:'' }}">
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="id_VACANT_oxygen_beds">Vaccant oxygen beds auto:</label>
+                                            <input type="number" name="VACANT_oxygen_beds" class="vIntegerField" 
+                                            id="id_VACANT_oxygen_beds" value='{{ stuff.oxygen_beds|sub:stuff.OCCUPIED_oxygen_beds }}'  readonly>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label for="id_icu_beds">Icu beds:</label><br>
+                                        <input type="number" name="icu_beds" class="vIntegerField"
+                                                 id="id_icu_beds" value="{{ stuff.icu_beds|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label for="id_OCCUPIED_icu_beds">OCCUPIED icu beds:</label>
+                                        <input type="number" name="OCCUPIED_icu_beds" class="vIntegerField" 
+                                                id="id_OCCUPIED_icu_beds" value="{{ stuff.OCCUPIED_icu_beds|default:'' }}">
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="id_VACANT_icu_beds">Vaccant icu beds:</label>
+                                            <input type="number" name="VACANT_icu_beds" class="vIntegerField" 
+                                            id="id_VACANT_icu_beds" value="{{ stuff.icu_beds|sub:stuff.OCCUPIED_icu_beds }}"  readonly>
+                                        </div>
+                                </div>
+                        </div>                
+                    <div class="form-row field-covid_lab">
+                        
+                        
+                            <div class="checkbox-row">
+                                
+                                
+                                
+                                {% if stuff.vaccine %}
+                                        <input type="checkbox" name="covid_lab" id="id_covid_lab" checked>
+                                {% else %} 
+                                        <input type="checkbox" name="covid_lab" id="id_covid_lab">
+                                {% endif %}
+                                <label class="vCheckboxLabel" for="id_covid_lab">Covid lab</label>
+                                
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="form-row field-vaccine">
+                        
+                        
+                            <div class="checkbox-row">
+                                
+                                {% if stuff.vaccine %}
+                                        <input type="checkbox" name="vaccine" id="id_vaccine" checked>
+                                {% else %} 
+                                        <input type="checkbox" name="vaccine" id="id_vaccine" >
+                                {% endif %}   
+                                    <label class="vCheckboxLabel" for="id_vaccine">Vaccine</label>
+                                
+                                
+                            </div>
+                        
+                    </div>
+                <div class="row">
+                        <div class="col-md-4 mb-3">
+                             <div class="form-group">
+                                <label for="id_total_vaccine_slot">Total vaccine slot:</label>
+                                <input type="number" name="total_vaccine_slot" class="vIntegerField" 
+                                        id="id_total_vaccine_slot" value="{{ stuff.total_vaccine_slot|default:' ' }}">
+                             </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label for="id_OCCUPIED_vaccine_slot">OCCUPIED vaccine slot:</label>
+                                <input type="number" name="OCCUPIED_vaccine_slot" class="vIntegerField" 
+                                        id="id_OCCUPIED_vaccine_slot" value="{{ stuff.OCCUPIED_vaccine_slot|default:' ' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="id_VACANT_vaccine_slot">Vaccant vaccine slots:</label>
+                                    <input type="number" name="VACANT_vaccine_slot" class="vIntegerField" 
+                                    id="id_VACANT_vaccine_slot" value="{{ stuff.total_vaccine_slot|sub:stuff.OCCUPIED_vaccine_slot }}"  readonly>
+                                </div>
+                        </div>
+                </div> 
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Save All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        {% include 'includes/footer.html' %}
+
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
